@@ -67,7 +67,7 @@ print(len(x_train))
 print("testing data size")
 print(len(x_test))
 
-#标准化
+
 ss = StandardScaler()
 X = ss.fit_transform(X, Y)
 x_test = ss.transform(x_test)
