@@ -52,7 +52,7 @@ class CNN_Residual_Attention(nn.Module):
         self.res_block1 = ResidualBlock(feature_size, out_channels[0])
         self.res_block2 = ResidualBlock(out_channels[0], out_channels[1])
         self.res_block3 = ResidualBlock(out_channels[1], out_channels[2])
-        self.attention_local = nn.Linear(888, 888)  # 修改这里
+        self.attention_local = nn.Linear(888, 888)
         self.attention_global = nn.Linear(out_channels[2], out_channels[2])
         self.fc1 = nn.Linear(out_channels[2], 256)
         self.fc2 = nn.Linear(256, output_size)
@@ -104,19 +104,16 @@ num_epochs=200
 min_loss = 1000
 
 for epoch in range(num_epochs):
-    model.train()  # 设置模型为训练模式
+    model.train()
     running_loss = 0.0
     for inputs, labels in train_loader:
-        # print(inputs.shape)
         inputs = inputs.unsqueeze(1)
-        print(inputs.shape)
-        inputs, labels = inputs.float().to(device), labels.float().to(device)  # 将输入和标签转换为 float 类型
-        optimizer.zero_grad()  # 梯度清零
-        outputs = model(inputs)  # 前向传播
-        # print(outputs)
-        loss = criterion(outputs.squeeze(1), labels)  # 计算损失
-        loss.backward()  # 反向传播
-        optimizer.step()  # 更新参数
+        inputs, labels = inputs.float().to(device), labels.float().to(device)
+        optimizer.zero_grad()
+        outputs = model(inputs)
+        loss = criterion(outputs.squeeze(1), labels)
+        loss.backward()
+        optimizer.step()
         running_loss += loss.item() * inputs.size(0)
     epoch_loss = running_loss / len(train_loader.dataset)
     print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch + 1, num_epochs, epoch_loss))
